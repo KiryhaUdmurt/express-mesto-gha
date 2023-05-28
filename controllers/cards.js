@@ -1,7 +1,7 @@
 const cardModel = require('../models/card');
 const {
   SERVER_ERR,
-  VALIDATION_ERR,
+  BAD_REQ,
   NOTFOUND_ERR,
 } = require('../utils/constants');
 
@@ -11,7 +11,7 @@ const getCards = async (req, res) => {
     res.send(cards);
   } catch (err) {
     if (err.name === 'ValidationError') {
-      res.status(VALIDATION_ERR).send({
+      res.status(BAD_REQ).send({
         message: 'Переданы некорректные данные',
         err: err.message,
         stack: err.stack,
@@ -35,7 +35,7 @@ const createCard = async (req, res) => {
     res.status(201).send(card);
   } catch (err) {
     if (err.name === 'ValidationError') {
-      res.status(VALIDATION_ERR).send({
+      res.status(BAD_REQ).send({
         message: 'Переданы некорректные данные',
         err: err.message,
         stack: err.stack,
@@ -54,11 +54,15 @@ const deleteCard = async (req, res) => {
   try {
     const { cardId } = req.params;
     const card = await cardModel.findByIdAndDelete(cardId);
+    if (!card) {
+      res.status(NOTFOUND_ERR).send({ message: 'Карточка с данным id не существует' });
+      return;
+    }
     res.send(card);
   } catch (err) {
     if (err.name === 'CastError') {
-      res.status(NOTFOUND_ERR).send({
-        message: 'Карточка с данным id не существует',
+      res.status(BAD_REQ).send({
+        message: 'Переданы некорректные данные',
         err: err.message,
         stack: err.stack,
       });
@@ -80,19 +84,15 @@ const likeCard = async (req, res) => {
       { $addToSet: { likes: req.user._id } },
       { new: true },
     );
-    res.send(likes);
-  } catch (err) {
-    if (err.name === 'ValidationError') {
-      res.status(VALIDATION_ERR).send({
-        message: 'Переданы некорректные данные',
-        err: err.message,
-        stack: err.stack,
-      });
+    if (!likes) {
+      res.status(NOTFOUND_ERR).send({ message: 'Карточка с данным id не существует' });
       return;
     }
+    res.send(likes);
+  } catch (err) {
     if (err.name === 'CastError') {
-      res.status(NOTFOUND_ERR).send({
-        message: 'Карточка с данным id не существует',
+      res.status(BAD_REQ).send({
+        message: 'Переданы некорректные данные',
         err: err.message,
         stack: err.stack,
       });
@@ -114,19 +114,15 @@ const dislikeCard = async (req, res) => {
       { $pull: { likes: req.user._id } },
       { new: true },
     );
-    res.send(likes);
-  } catch (err) {
-    if (err.name === 'ValidationError') {
-      res.status(VALIDATION_ERR).send({
-        message: 'Переданы некорректные данные',
-        err: err.message,
-        stack: err.stack,
-      });
+    if (!likes) {
+      res.status(NOTFOUND_ERR).send({ message: 'Карточка с данным id не существует' });
       return;
     }
+    res.send(likes);
+  } catch (err) {
     if (err.name === 'CastError') {
-      res.status(NOTFOUND_ERR).send({
-        message: 'Карточка с данным id не существует',
+      res.status(BAD_REQ).send({
+        message: 'Переданы некорректные данные',
         err: err.message,
         stack: err.stack,
       });
