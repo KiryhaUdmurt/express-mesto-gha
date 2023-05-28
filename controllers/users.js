@@ -10,19 +10,10 @@ const getUsers = async (req, res) => {
     const users = await userModel.find({});
     res.send(users);
   } catch (err) {
-    if (err.name === 'ValidationError') {
-      res.status(400).send({
-        message: 'Переданы некорректные данные',
-        err: err.message,
-        stack: err.stack,
-      });
-      return;
-    }
-    res.status(500).send({
+    res.status(SERVER_ERR).send({
       message: 'Internal Server Error',
-      err: err.message,
-      stack: err.stack,
     });
+    console.log(err.message);
   }
 };
 
@@ -39,47 +30,16 @@ const getUserById = async (req, res) => {
     if (err.name === 'CastError') {
       res.status(BAD_REQ).send({
         message: 'Переданы некорректные данные',
-        err: err.message,
-        stack: err.stack,
       });
+      console.log(err.message);
       return;
     }
     res.status(SERVER_ERR).send({
       message: 'Internal Server Error',
-      err: err.message,
-      stack: err.stack,
     });
+    console.log(err.message);
   }
 };
-
-// const getUserById = (req, res) => {
-//   userModel.findById(req.params.userId)
-//     .orFail(() => {
-//       throw new Error('NotFound');
-//     })
-//     .then((user) => {
-//       res.send(user);
-//     })
-//     .catch((err) => {
-//       if (err.message === 'NotFound') {
-//         return res.status(404).send({
-//           message: 'User Not Found',
-//         });
-//       }
-//       if (err.name === 'CastError') {
-//         return res.status(BAD_REQ).send({
-//           message: 'Пользователя с данным id не существует',
-//           err: err.message,
-//           stack: err.stack,
-//         });
-//       }
-//       return res.status(SERVER_ERR).send({
-//         message: 'Internal Server Error',
-//         err: err.message,
-//         stack: err.stack,
-//       });
-//     });
-// };
 
 const createUser = async (req, res) => {
   try {
@@ -89,16 +49,14 @@ const createUser = async (req, res) => {
     if (err.name === 'ValidationError') {
       res.status(BAD_REQ).send({
         message: 'Переданы некорректные данные',
-        err: err.message,
-        stack: err.stack,
       });
+      console.log(err.message);
       return;
     }
     res.status(SERVER_ERR).send({
       message: 'Internal Server Error',
-      err: err.message,
-      stack: err.stack,
     });
+    console.log(err.message);
   }
 };
 
@@ -119,16 +77,14 @@ const updateUser = async (req, res) => {
     if (err.name === 'ValidationError') {
       res.status(BAD_REQ).send({
         message: 'Переданы некорректные данные',
-        err: err.message,
-        stack: err.stack,
       });
+      console.log(err.message);
       return;
     }
     res.status(SERVER_ERR).send({
       message: 'Internal Server Error',
-      err: err.message,
-      stack: err.stack,
     });
+    console.log(err.message);
   }
 };
 
@@ -149,16 +105,14 @@ const updateAvatar = async (req, res) => {
     if (err.name === 'ValidationError') {
       res.status(BAD_REQ).send({
         message: 'Переданы некорректные данные',
-        err: err.message,
-        stack: err.stack,
       });
+      console.log(err.message);
       return;
     }
     res.status(SERVER_ERR).send({
       message: 'Internal Server Error',
-      err: err.message,
-      stack: err.stack,
     });
+    console.log(err.message);
   }
 };
 

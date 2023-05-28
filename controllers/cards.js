@@ -10,19 +10,10 @@ const getCards = async (req, res) => {
     const cards = await cardModel.find({});
     res.send(cards);
   } catch (err) {
-    if (err.name === 'ValidationError') {
-      res.status(BAD_REQ).send({
-        message: 'Переданы некорректные данные',
-        err: err.message,
-        stack: err.stack,
-      });
-      return;
-    }
     res.status(SERVER_ERR).send({
       message: 'Internal Server Error',
-      err: err.message,
-      stack: err.stack,
     });
+    console.log(err.message);
   }
 };
 
@@ -37,16 +28,14 @@ const createCard = async (req, res) => {
     if (err.name === 'ValidationError') {
       res.status(BAD_REQ).send({
         message: 'Переданы некорректные данные',
-        err: err.message,
-        stack: err.stack,
       });
+      console.log(err.message);
       return;
     }
     res.status(SERVER_ERR).send({
       message: 'Internal Server Error',
-      err: err.message,
-      stack: err.stack,
     });
+    console.log(err.message);
   }
 };
 
@@ -63,16 +52,14 @@ const deleteCard = async (req, res) => {
     if (err.name === 'CastError') {
       res.status(BAD_REQ).send({
         message: 'Переданы некорректные данные',
-        err: err.message,
-        stack: err.stack,
       });
+      console.log(err.message);
       return;
     }
     res.status(SERVER_ERR).send({
       message: 'Internal Server Error',
-      err: err.message,
-      stack: err.stack,
     });
+    console.log(err.message);
   }
 };
 
@@ -93,16 +80,14 @@ const likeCard = async (req, res) => {
     if (err.name === 'CastError') {
       res.status(BAD_REQ).send({
         message: 'Переданы некорректные данные',
-        err: err.message,
-        stack: err.stack,
       });
+      console.log(err.message);
       return;
     }
     res.status(SERVER_ERR).send({
       message: 'Internal Server Error',
-      err: err.message,
-      stack: err.stack,
     });
+    console.log(err.message);
   }
 };
 
@@ -123,16 +108,14 @@ const dislikeCard = async (req, res) => {
     if (err.name === 'CastError') {
       res.status(BAD_REQ).send({
         message: 'Переданы некорректные данные',
-        err: err.message,
-        stack: err.stack,
       });
+      console.log(err.message);
       return;
     }
     res.status(SERVER_ERR).send({
       message: 'Internal Server Error',
-      err: err.message,
-      stack: err.stack,
     });
+    console.log(err.message);
   }
 };
 
