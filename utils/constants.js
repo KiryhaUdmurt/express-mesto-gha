@@ -4,8 +4,14 @@ const BAD_REQ = 400;
 
 const NOTFOUND_ERR = 404;
 
+const ALREADY_EXISTS = 409;
+
+const WRONG_EMAIL = 401;
+
 module.exports = {
   SERVER_ERR,
   BAD_REQ,
   NOTFOUND_ERR,
+  ALREADY_EXISTS,
+  WRONG_EMAIL,
 };

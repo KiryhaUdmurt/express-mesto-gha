@@ -7,13 +7,13 @@ const app = express();
 
 app.use(express.json());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '646f637704aa1c43a856d8d5',
-  };
+// app.use((req, res, next) => {
+//   req.user = {
+//     _id: '646f637704aa1c43a856d8d5',
+//   };
 
-  next();
-});
+//   next();
+// });
 
 app.use(router);
 
