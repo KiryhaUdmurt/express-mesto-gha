@@ -1,3 +1,6 @@
+const BadRequestError = require('../errors/bad-req-err');
+const ForbiddenError = require('../errors/forbidden-err');
+const NotFoundError = require('../errors/not-found-err');
 const cardModel = require('../models/card');
 const {
   SERVER_ERR,
@@ -5,19 +8,19 @@ const {
   NOTFOUND_ERR,
 } = require('../utils/constants');
 
-const getCards = async (req, res) => {
+const getCards = async (req, res, next) => {
   try {
     const cards = await cardModel.find({});
+    if (!cards) {
+      throw new NotFoundError('Карточки не найдены');
+    }
     res.send(cards);
   } catch (err) {
-    res.status(SERVER_ERR).send({
-      message: 'Internal Server Error',
-    });
-    console.log(err.message);
+    next(err);
   }
 };
 
-const createCard = async (req, res) => {
+const createCard = async (req, res, next) => {
   try {
     const card = await cardModel.create({
       ...req.body,
@@ -26,44 +29,37 @@ const createCard = async (req, res) => {
     res.status(201).send(card);
   } catch (err) {
     if (err.name === 'ValidationError') {
-      res.status(BAD_REQ).send({
-        message: 'Переданы некорректные данные',
-      });
-      console.log(err.message);
-      return;
+      next(new BadRequestError('Переданы некорректные данные'));
     }
-    res.status(SERVER_ERR).send({
-      message: 'Internal Server Error',
-    });
-    console.log(err.message);
+    next(err);
   }
 };
 
-const deleteCard = async (req, res) => {
+const deleteCard = async (req, res, next) => {
   try {
     const { cardId } = req.params;
-    const card = await cardModel.findByIdAndDelete(cardId);
+    const { _id } = req.user;
+
+    const card = await cardModel.findById(cardId).populate('owner');
     if (!card) {
-      res.status(NOTFOUND_ERR).send({ message: 'Карточка с данным id не существует' });
-      return;
+      throw new NotFoundError('Карточка с данным id не существует');
     }
+
+    const owner = card.owner.id;
+    if (owner !== _id) {
+      throw new ForbiddenError('Можно удалить только свою карточку');
+    }
+
     res.send(card);
   } catch (err) {
     if (err.name === 'CastError') {
-      res.status(BAD_REQ).send({
-        message: 'Переданы некорректные данные',
-      });
-      console.log(err.message);
-      return;
+      next(new BadRequestError('Переданы некорректные данные'));
     }
-    res.status(SERVER_ERR).send({
-      message: 'Internal Server Error',
-    });
-    console.log(err.message);
+    next(err);
   }
 };
 
-const likeCard = async (req, res) => {
+const likeCard = async (req, res, next) => {
   try {
     const { cardId } = req.params;
     const likes = await cardModel.findByIdAndUpdate(
@@ -72,26 +68,18 @@ const likeCard = async (req, res) => {
       { new: true },
     );
     if (!likes) {
-      res.status(NOTFOUND_ERR).send({ message: 'Карточка с данным id не существует' });
-      return;
+      throw new NotFoundError('Карточка с данным id не существует');
     }
     res.send(likes);
   } catch (err) {
     if (err.name === 'CastError') {
-      res.status(BAD_REQ).send({
-        message: 'Переданы некорректные данные',
-      });
-      console.log(err.message);
-      return;
+      next(new BadRequestError('Переданы некорректные данные'));
     }
-    res.status(SERVER_ERR).send({
-      message: 'Internal Server Error',
-    });
-    console.log(err.message);
+    next(err);
   }
 };
 
-const dislikeCard = async (req, res) => {
+const dislikeCard = async (req, res, next) => {
   try {
     const { cardId } = req.params;
     const likes = await cardModel.findByIdAndUpdate(
@@ -100,22 +88,14 @@ const dislikeCard = async (req, res) => {
       { new: true },
     );
     if (!likes) {
-      res.status(NOTFOUND_ERR).send({ message: 'Карточка с данным id не существует' });
-      return;
+      throw new NotFoundError('Карточка с данным id не существует');
     }
     res.send(likes);
   } catch (err) {
     if (err.name === 'CastError') {
-      res.status(BAD_REQ).send({
-        message: 'Переданы некорректные данные',
-      });
-      console.log(err.message);
-      return;
+      next(new BadRequestError('Переданы некорректные данные'));
     }
-    res.status(SERVER_ERR).send({
-      message: 'Internal Server Error',
-    });
-    console.log(err.message);
+    next(err);
   }
 };
 

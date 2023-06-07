@@ -1,21 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const { errors } = require('celebrate');
 const router = require('./routes');
+const errorHandler = require('./middlewares/errorHandler');
 
 const { PORT = 3000 } = process.env;
 const app = express();
 
 app.use(express.json());
 
-// app.use((req, res, next) => {
-//   req.user = {
-//     _id: '646f637704aa1c43a856d8d5',
-//   };
-
-//   next();
-// });
-
 app.use(router);
+app.use(errors());
+app.use(errorHandler);
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
