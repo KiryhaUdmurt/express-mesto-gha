@@ -1,20 +1,13 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const userModel = require('../models/user');
-
-const {
-  SERVER_ERR,
-  BAD_REQ,
-  NOTFOUND_ERR,
-  ALREADY_EXISTS,
-  WRONG_EMAIL,
-} = require('../utils/constants');
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-req-err');
 const AlreadyExistsError = require('../errors/already-exists-err');
 const AuthError = require('../errors/auth-err');
 
 const { SECRET_KEY = 'some-secret-key' } = process.env;
+// const { SECRET_KEY = crypto.randomBytes(16).toString('hex') } = process.env;
 
 const getUsers = async (req, res, next) => {
   try {

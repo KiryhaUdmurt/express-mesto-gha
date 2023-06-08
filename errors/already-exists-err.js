@@ -1,7 +1,9 @@
+const { ALREADY_EXISTS } = require('../utils/constants');
+
 class AlreadyExistsError extends Error {
   constructor(message) {
     super(message);
-    this.statusCode = 409;
+    this.statusCode = ALREADY_EXISTS;
   }
 }
 

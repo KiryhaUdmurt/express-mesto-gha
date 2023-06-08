@@ -6,12 +6,15 @@ const NOTFOUND_ERR = 404;
 
 const ALREADY_EXISTS = 409;
 
-const WRONG_EMAIL = 401;
+const AUTH_ERR = 401;
+
+const FORBIDDEN_ERR = 403;
 
 module.exports = {
   SERVER_ERR,
   BAD_REQ,
   NOTFOUND_ERR,
   ALREADY_EXISTS,
-  WRONG_EMAIL,
+  AUTH_ERR,
+  FORBIDDEN_ERR,
 };
