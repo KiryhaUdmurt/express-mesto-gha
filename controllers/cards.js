@@ -2,11 +2,6 @@ const BadRequestError = require('../errors/bad-req-err');
 const ForbiddenError = require('../errors/forbidden-err');
 const NotFoundError = require('../errors/not-found-err');
 const cardModel = require('../models/card');
-const {
-  SERVER_ERR,
-  BAD_REQ,
-  NOTFOUND_ERR,
-} = require('../utils/constants');
 
 const getCards = async (req, res, next) => {
   try {

@@ -23,7 +23,6 @@ const userSchema = new mongoose.Schema({
       validator(v) {
         return /https?:\/\/(www)?[a-z0-9\-._~:\/?#[\]@!$&'()*+,;=]+#?$/gmi.test(v);
       },
-      message: (props) => `Некорректный ${props.value}.`,
     },
   },
   email: {
