@@ -17,7 +17,44 @@ const validateAuth = celebrate({
   }),
 });
 
+const validateUserId = celebrate({
+  params: Joi.object().keys({
+    userId: Joi.string().length(24),
+  }),
+});
+
+const validateUserUpdate = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
+  }),
+});
+
+const validateUserAvatar = celebrate({
+  body: Joi.object().keys({
+    avatar: Joi.string().regex(/https?:\/\/(www)?[0-9a-z\-._~:/?#[\]@!$&'()*+,;=]+#?$/i),
+  }),
+});
+
+const validateCard = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30).required(),
+    link: Joi.string().required().regex(/https?:\/\/(www)?[0-9a-z\-._~:/?#[\]@!$&'()*+,;=]+#?$/i),
+  }),
+});
+
+const validateCardId = celebrate({
+  params: Joi.object().keys({
+    cardId: Joi.string().length(24),
+  }),
+});
+
 module.exports = {
   validateUser,
   validateAuth,
+  validateUserId,
+  validateUserUpdate,
+  validateUserAvatar,
+  validateCard,
+  validateCardId,
 };
