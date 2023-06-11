@@ -45,6 +45,8 @@ const deleteCard = async (req, res, next) => {
       throw new ForbiddenError('Можно удалить только свою карточку');
     }
 
+    await cardModel.findByIdAndRemove(cardId);
+
     res.send(card);
   } catch (err) {
     if (err.name === 'CastError') {

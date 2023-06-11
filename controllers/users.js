@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+// const crypto = require('crypto');
 const userModel = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-req-err');
@@ -128,22 +129,6 @@ const login = async (req, res, next) => {
     next(err);
   }
 };
-
-// const login = (req, res) => {
-//   const { email, password } = req.body;
-
-//   return userModel.findUserByCredentials(email, password)
-//     .then((user) => {
-//       const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
-//       res.send({ token });
-//     })
-//     .catch((err) => {
-//       // ошибка аутентификации
-//       res
-//         .status(401)
-//         .send({ message: err.message });
-//     });
-// };
 
 module.exports = {
   getUsers,
