@@ -6,9 +6,6 @@ const cardModel = require('../models/card');
 const getCards = async (req, res, next) => {
   try {
     const cards = await cardModel.find({});
-    if (!cards) {
-      throw new NotFoundError('Карточки не найдены');
-    }
     res.send(cards);
   } catch (err) {
     next(err);
@@ -25,6 +22,7 @@ const createCard = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new BadRequestError('Переданы некорректные данные'));
+      return;
     }
     next(err);
   }
@@ -51,6 +49,7 @@ const deleteCard = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'CastError') {
       next(new BadRequestError('Переданы некорректные данные'));
+      return;
     }
     next(err);
   }
@@ -71,6 +70,7 @@ const likeCard = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'CastError') {
       next(new BadRequestError('Переданы некорректные данные'));
+      return;
     }
     next(err);
   }
@@ -91,6 +91,7 @@ const dislikeCard = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'CastError') {
       next(new BadRequestError('Переданы некорректные данные'));
+      return;
     }
     next(err);
   }

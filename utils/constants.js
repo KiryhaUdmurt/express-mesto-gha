@@ -10,6 +10,8 @@ const AUTH_ERR = 401;
 
 const FORBIDDEN_ERR = 403;
 
+const URL_REGEX = /https?:\/\/(www)?[0-9a-z\-._~:/?#[\]@!$&'()*+,;=]+[.]{1,}[0-9a-z\-._~:/?#[\]@!$&'()*+,;=]+/i;
+
 module.exports = {
   SERVER_ERR,
   BAD_REQ,
@@ -17,4 +19,5 @@ module.exports = {
   ALREADY_EXISTS,
   AUTH_ERR,
   FORBIDDEN_ERR,
+  URL_REGEX,
 };

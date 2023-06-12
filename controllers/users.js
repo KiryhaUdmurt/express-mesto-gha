@@ -13,9 +13,6 @@ const { SECRET_KEY = 'some-secret-key' } = process.env;
 const getUsers = async (req, res, next) => {
   try {
     const users = await userModel.find({});
-    if (!users) {
-      throw new NotFoundError('Пользователи не найдены');
-    }
     res.send(users);
   } catch (err) {
     next(err);
@@ -46,6 +43,7 @@ const getUserById = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'CastError') {
       next(new BadRequestError('Переданы некорректные данные'));
+      return;
     }
     next(err);
   }
@@ -68,9 +66,11 @@ const createUser = (req, res, next) => {
         .catch((err) => {
           if (err.code === 11000) {
             next(new AlreadyExistsError('Пользователь с данным email уже существует'));
+            return;
           }
           if (err.name === 'ValidationError') {
             next(new BadRequestError('Переданы некорректные данные'));
+            return;
           }
           next(err);
         });
@@ -92,6 +92,7 @@ const updateUser = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new BadRequestError('Переданы некорректные данные'));
+      return;
     }
     next(err);
   }
@@ -112,6 +113,7 @@ const updateAvatar = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new BadRequestError('Переданы некорректные данные'));
+      return;
     }
     next(err);
   }
@@ -127,9 +129,6 @@ const login = async (req, res, next) => {
     }
     res.send({ token });
   } catch (err) {
-    if (err.name === 'ValidationError') {
-      next(new BadRequestError('Переданы некорректные данные'));
-    }
     next(err);
   }
 };
